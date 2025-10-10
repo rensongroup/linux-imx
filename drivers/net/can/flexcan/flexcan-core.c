@@ -1317,6 +1317,9 @@ static void flexcan_set_bittiming_cbt(const struct net_device *dev)
 		}
 	}
 
+	// Bit15 (TDCEN) should not be enabled according to the spec if dbrp > 2 and in this driver it gets enabled if dbrp = 10.
+	// But in our case, we will always disable TDCEN since we use a low-bitrate.
+ 	reg_fdctrl &= ~FLEXCAN_FDCTRL_TDCEN;
 	netdev_dbg(dev, "writing fdctrl=0x%08x\n", reg_fdctrl);
 	priv->write(reg_fdctrl, &regs->fdctrl);
 
@@ -1592,7 +1595,9 @@ static int flexcan_chip_start(struct net_device *dev)
 				FIELD_PREP(FLEXCAN_FDCTRL_MBDSR0,
 					   FLEXCAN_FDCTRL_MBDSR_8);
 		}
-
+		// Bit15 (TDCEN) should not be enabled according to the spec if dbrp > 2 and in this driver it gets enabled if dbrp = 10.
+		// But in our case, we will always disable TDCEN since we use a low-bitrate.
+ 		reg_fdctrl &= ~FLEXCAN_FDCTRL_TDCEN;
 		netdev_dbg(dev, "%s: writing fdctrl=0x%08x",
 			   __func__, reg_fdctrl);
 		priv->write(reg_fdctrl, &regs->fdctrl);
