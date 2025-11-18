@@ -84,6 +84,8 @@
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
 		enable-active-high;
+		regulator-boot-on;
+		regulator-always-on;
 		vin-supply = <&buck4>;
 	};
 
