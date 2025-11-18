@@ -374,11 +374,11 @@
 };
 
 &lpspi3 {
-	fsl,spi-num-chipselects = <1>;
+	fsl,spi-num-chipselects = <2>;
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&pinctrl_lpspi3>;
 	pinctrl-1 = <&pinctrl_lpspi3>;
-	cs-gpios = <&gpio2 8 GPIO_ACTIVE_LOW>;
+	cs-gpios = <&gpio2 8 GPIO_ACTIVE_LOW &gpio2 7 GPIO_ACTIVE_LOW>;
 	gpio = <&pcal6408 0 GPIO_ACTIVE_HIGH>;
 	status = "okay";
 
@@ -386,6 +386,16 @@
 		reg = <0>;
 		compatible = "lwn,bk4";
 		spi-max-frequency = <1000000>;
+	};
+
+	gpio6: gpio6@1 {
+		compatible = "fairchild,74hc595";
+		reg = <1>;
+		gpio-controller;
+		#gpio-cells = <2>;
+		registers-number = <2>;
+		spi-max-frequency = <100000>;
+		enable-gpios = <&gpio2 24 GPIO_ACTIVE_LOW>;
 	};
 };
 
@@ -827,6 +837,8 @@
 
 	pinctrl_lpspi3: lpspi3grp {
 		fsl,pins = <
+			MX91_PAD_GPIO_IO24__GPIO2_IO24		0x3fe
+			MX91_PAD_GPIO_IO07__GPIO2_IO7       0x3fe
 			MX91_PAD_GPIO_IO08__GPIO2_IO8		0x3fe
 			MX91_PAD_GPIO_IO09__LPSPI3_SIN		0x3fe
 			MX91_PAD_GPIO_IO10__LPSPI3_SOUT		0x3fe
